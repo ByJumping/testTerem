@@ -1,10 +1,11 @@
 const submit = document.querySelector('.submit')
-const reqURL = './data.json'
 const data = document.querySelector('.data')
 const getBtn = document.querySelector('.get')
 const select = document.querySelector('.select')
 const input1 = document.querySelector('.input1')
 const input2 = document.querySelector('.input2')
+
+
 
 submit.addEventListener('click', (e)=>{
     e.preventDefault()
@@ -16,19 +17,17 @@ submit.addEventListener('click', (e)=>{
     <div>Первое значение: ${input1.value}</div>
     <div>Второе значение: ${input2.value}</div>
     `)
-        let data1 = JSON.stringify({
-            select: select.value,
-            firstName: input1.value,
-            lastName: input2.value
-        })
-        console.log(data1)
+        createPerson().then()
     }
 })
 
 getBtn.addEventListener('click', ()=> {
-    sendRequest('GET', reqURL)
-        .then(data=> alert(`Имя: ${data.firstName}
-Фамилия: ${data.lastName}`))
+    sendRequest('GET', 'https://terem-1c850-default-rtdb.firebaseio.com/people.json')
+        .then(data=> console.log(Object.keys(data).map(key=> {
+            return {
+                ...data[key]
+            }
+        })))
         .catch(err=> console.log(err))
 })
 
@@ -38,6 +37,25 @@ function sendRequest(method, url, body = null) {
         return response.json()
     })
 }
-sendRequest('GET', reqURL)
-.then(data=> console.log(data))
+sendRequest('GET', 'https://terem-1c850-default-rtdb.firebaseio.com/people.json')
+.then(data=> console.log(Object.keys(data).map(key=> {
+    return {
+        ...data[key]
+    }
+})))
 .catch(err=> console.log(err))
+
+
+function createPerson() {
+    return fetch('https://terem-1c850-default-rtdb.firebaseio.com/people.json', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            select: select.value,
+            firstName: input1.value,
+            lastName: input2.value
+        })
+    })
+}
