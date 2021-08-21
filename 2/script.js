@@ -16,6 +16,12 @@ submit.addEventListener('click', (e)=>{
     <div>Первое значение: ${input1.value}</div>
     <div>Второе значение: ${input2.value}</div>
     `)
+        let data1 = JSON.stringify({
+            select: select.value,
+            firstName: input1.value,
+            lastName: input2.value
+        })
+        console.log(data1)
     }
 })
 
